@@ -1,0 +1,20 @@
+---
+- name: Get ARP information
+  hosts: all
+  gather_facts: false
+
+
+  tasks:
+    - name: show arp
+      raw: "show arp"
+
+      register: print_output
+
+    -  debug: var=print_output.stdout_lines
+
+
+# Commands to run: 
+#1) ansible-playbook get_arp_playbook.yml -u andres -k
+#2) Grep for MAC address: ansible-playbook get_arp_playbook.yml -u andres -k | grep 'ok:\|fe7a'
+#Using regular expression in order to specify that the dot is .3
+#3) Grep for IP address: ansible-playbook get_arp_playbook.yml -u andres -k | grep 'ok:\|122\.3'
