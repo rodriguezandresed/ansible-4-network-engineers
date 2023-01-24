@@ -1,6 +1,6 @@
 All that is needed to use ansible is SSH enabled on the devices
 
-The command "ansible --version" shows the current ansible version being used
+The command "`ansible --version`" shows the current ansible version being used
 
 We can check the current ansible configuration by:
 
