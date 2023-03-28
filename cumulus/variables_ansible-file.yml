@@ -1,0 +1,17 @@
+interfaces:
+  leaf1:
+    loopback: "10.2.1.1"
+    bonds:
+      bond0:
+        members: ["swp1","swp2"]
+        address: "10.1.1.1/30"
+    bridges:
+      vlan_aware:
+        name: "bridge"
+        pvid: "1"
+        vids: "100 200"
+        members: ["swp3", "swp5", "swp6"]
+        svi:
+          bridge.100:
+            ip_and_mask: "10.3.3.1/24"  
+    

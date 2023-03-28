@@ -1,0 +1,10 @@
+---
+- hosts: leaf1
+  user: root
+  roles:
+  #roles to execute
+    - common
+    - ospfnum
+  handlers:
+  #this is an optional argument to share handlers for both roles (rather than having two independent handler files)
+    - include: handlers/main.yml

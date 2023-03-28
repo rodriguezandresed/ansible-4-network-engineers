@@ -1,0 +1,28 @@
+enable
+config t
+int vlan 1
+no shut
+int g0/0
+no shut
+username andres pass cisco
+username andres priv 15
+line vty 0 4
+login local
+transport input all
+ip domain-name cciepython.com
+crypto key generate rsa
+1024
+
+INT G0/0
+ip address 192.168.122.73 255.255.255.0
+end
+
+
+int vlan 1
+ip address 192.168.122.74 255.255.255.0
+end
+
+
+int vlan 1
+ip address 192.168.122.75 255.255.255.0
+end

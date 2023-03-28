@@ -21,8 +21,18 @@ ansible --list-hosts all
 On the host file (inventory file!) you can add groups as [GroupName] or devices as:
 
 On nano we can set marks using ALT + SHIFT + A then highlight what you cant to copy and ALT + SHIFT + 6 to copy and release with CTRL + U
+
+
+We can find modules on http://docs.ansible.com
+
+Core modules are stored at: /usr/share/pyshared/ansible/modules
+
+
 -------------------------------
+
+#Group to be called adhocs or playbooks command
 [gns3-ios]
+#hostname is the DNS name for switch, or server on network, can be called by group or directly
 S1
 S2
 R1

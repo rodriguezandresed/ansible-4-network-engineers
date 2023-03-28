@@ -1,0 +1,25 @@
+---
+- hosts: leaf1
+  vars:
+    lookback_ip: "10.2.1.1"
+  remote_user: root
+  tasks:
+  - name: write the networking config file
+    template: src=interfaces.j2 dest=/etc/network/interfaces
+    #if the changes need to be made, it goes to notify and then handlers to make sure it's running!
+    notify:
+    - restart networking
+  - name: ensure networking is running
+    service: name=networking state=started
+  handlers:
+    - name: restart networking
+      service: name=networking state=restarted
+
+#interfaces.j2 template
+#This file has been configured by ansible
+#auto eth0
+#iface eth0 intet dhcp
+#auto lo
+# iface lo inet loopback
+#   address {{looback_ip}}/32
+

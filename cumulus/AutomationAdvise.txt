@@ -1,0 +1,139 @@
+Documentation to read:
+
+Documentation:
+http://docs.ansible.com
+
+Cumulus GitHub with Ansible Examples:
+https://github.com/CumulusNetworks/BootcampAutomation
+https://github.com/CumulusNetworks/cldemo-bootcamp
+
+Cumulus Networks Automation KBs:
+https://support.cumulusnetworks.com/hc/en-us/sections/200398836
+
+Cumulus Networks Demos:
+https://support.cumulusnetworks.com/hc/en-us/sections/200398866
+
+-------------------------------------------------------------------------------------
+
+There are 2 main types of metholodogies for Automation:
+
+- Agentless:
+ * Ansible
+ No additional application software is required
+ It usually uses ssh to communicate with network devices
+ It requires clients to be available during excecution
+ Options depend on the master
+ Uses PUSH as way of introducing configurations 
+    So a user or process on a server sends commands to the local server (immediate remote execution)
+     *Disadvantages: you must manually push the configuration
+
+
+- Agent-based DevOps Tools:
+ Requries the installation of an application such as Puppet to communicate with the control server
+ So it reports configuration changes or information
+ It uses existing processes to perform its functions
+ Clients call the master when they're able to do so
+ More scalable but hard to control
+ It uses a PULL methodology 
+    An agent on the local system (switch) pulls a server for information
+    It pulls configuration from the server (so you don't have to manually set it)
+    Puppet every 30 minutes pools for configuration changes and if they're needed they pull them
+
+
+-------------------------------------------------------------------------------------
+
+Push Based: 
+- Ansible
+
+Pull based:
+- CFEngine
+- CHEF
+- Puppet
+- SaltStack ( this one allows you to pull and push configurations )
+
+-------------------------------------------------------------------------------------
+
+Each of this tools uses its own name for: configuration file and App Store (this is where you get more addons)
+
+- Ansible: Playbooks
+- CHEF: Cookboks
+- SaltStack: Saltstate(SLS)
+- CFEngine: Policty
+- Puppet: Manifest
+    
+App Stores:
+
+- Ansible: Galaxy
+- CHEF: Supermarket
+- SaltStack: Formulas
+- CFEngine: Community CodeRepository
+- Puppet: Forge
+
+-------------------------------------------------------------------------------------
+
+Cumulus are linux based network devices!
+
+Zero Touch Provisioning
+
+It's adding an additional step
+
+Where an script installs the agent or the ssh public keys (ansible)
+
+So that when the switch boots:
+1. it uses DHCP it gets a response with option 239
+2. An url location of the ZTP script
+3. It downloads and runs the ZTP script  as root from the specified web server
+4. And now the script install the agent or the ssh public keys 
+
+Ansible for example, takes the public key from the management station and installs it on an authorized key file on the switches
+(This is what allows ansible to log on switches)
+
+This is usually added on the dhcp files such as 
+
+/etc/dhcp/dhcpd.conf
+
+But if it needed to configure on another file you could find it in "Extra Configurations"
+
+for example: /etc/dhcp/dhcpd.pools
+
+and add:
+
+options cumulus-provision-url "http//ip-web-server/ztp-ansible.sh";
+
+
+-------------------------------------------------------------------------------------
+We can use the tree command to print the directory structure
+To scale ansible playbooks we can use the sample directory structure with included defaults:
+
+playboom.yml
+roles/
+    > common/  (this is the name of a role)
+        >> files/
+        >> templates/
+        >> tasks/  (this is where tasks are executed from this particular role. the rest direcotires are optionals but can be used by tasks)
+            main.yml
+        >> handlers/
+        >> vars/
+        >> defaults/
+        >> meta/
+    > ospfnum/  
+        >> files/
+            quagga_daemon
+        >> templates/
+            interfaces.j2
+            quagga_config.j2
+        >> tasks/
+            main.yml  
+        >> handlers/
+        >> vars/
+            main.yml
+        >> defaults/
+        >> meta/
+
+-------------------------------------------------------------------------------------
+For commons:
+1. Playbooks runs specified roles (common)
+2.  Common role runs the task defined in task/main.yml
+3. Task builds configurations from variables and templates
+4. Push configurations to switch
+
